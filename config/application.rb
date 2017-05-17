@@ -1,6 +1,7 @@
 require_relative 'boot'
-
+require_relative 'config_hash'
 require 'rails/all'
+
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -15,4 +16,10 @@ module Dummyapp
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
   end
+
+SECRETS = if Rails.env.production?
+  ConfigHash.from_json_file("#{__dir__}/secrets.json")
+else
+  ConfigHash.from_json_file("#{__dir__}/secrets.#{Rails.env}.json")
+end
 end
